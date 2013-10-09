@@ -3,6 +3,7 @@ package de.ww.statelessui.generator;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import de.ww.statelessui.annotations.As;
 import de.ww.statelessui.annotations.From;
 import de.ww.statelessui.annotations.HandlerMethod;
 import de.ww.statelessui.annotations.Model;
@@ -58,36 +59,91 @@ public class Generator {
 	 * @param controller
 	 * @return
 	 */
-	private Object generateKnockoutHandlers(Class<?> controllerClass, Class<?> modelClass) {
+	private String generateKnockoutHandlers(Class<?> controllerClass, Class<?> modelClass) {
 		StringBuffer code = new StringBuffer();
 		
 		Method methods[] = controllerClass.getMethods();
 		for(Method m : methods) {
 			if(m.isAnnotationPresent(HandlerMethod.class)) {
-				HandlerMethod annotation = m.getAnnotation(HandlerMethod.class);
-				String methodName = m.getName();
-				code.append("\n\t/*\n\t * Aufruf einer Controller-Methode\n\t */");
-				code.append("\n\tself."+methodName+" = function(");
-				String methodBody = "";
-				for(int i = 0; i < m.getParameterTypes().length; i++) {
-					boolean containsFrom = false;
-					for(Annotation paramAnnotation : m.getParameterAnnotations()[i]) {
-						if(paramAnnotation instanceof From) {
-							containsFrom = true;
-							methodBody += "\t\tvar param"+i+" = "+((From)paramAnnotation).value()+";\n";
-						}
-					}
-					if(!containsFrom) {
-						code.append("param"+i);
-					}
-				}
-				code.append(") {\n"+methodBody+"\n");
-				code.append("\t//TODO: make a "+annotation.type().toString()+"-Request to "+annotation.pathPattern()+"\n");
-				code.append("\t};\n");
+				code.append(generateSingleKnockoutHandler(m));
 			}
 		}
 		
 		return code.toString();
+	}
+	
+	/**
+	 * Erstellt eine einzelne Handler-Funktion
+	 * @param m
+	 * @return
+	 */
+	public String generateSingleKnockoutHandler(Method m) {
+		StringBuffer code = new StringBuffer();
+		HandlerMethod annotation = m.getAnnotation(HandlerMethod.class);
+		String methodName = m.getName();
+		code.append("\n\t/*\n\t * Aufruf einer Controller-Methode\n\t */");
+		code.append("\n\tself."+methodName+" = function(");
+		StringBuffer methodBody = new StringBuffer();
+		for(int i = 0; i < m.getParameterTypes().length; i++) {
+			From from = null;
+			As as = null;
+			for(Annotation paramAnnotation : m.getParameterAnnotations()[i]) {
+				if(paramAnnotation instanceof From) {				
+					from = (From)paramAnnotation;
+				} else if(paramAnnotation instanceof As) {
+					as = (As)paramAnnotation;
+				}
+			}
+			generateCodeForParameterHandling(from, as, i, methodBody, code);
+		}
+		code.append(") {\n"+methodBody.toString()+"\n");
+		
+		switch(annotation.type()) {
+			case GET:
+				code.append(generateGetRequestFor(annotation.pathPattern()));
+				break;
+			case PUT: 
+				break;
+			case POST: 
+				break;
+			case DELETE: 
+				break;
+			default: 
+				throw new RuntimeException("Unsupported Type");
+		}
+		code.append("\t//TODO: make a "+annotation.type().toString()+"-Request to "+annotation.pathPattern()+"\n");
+		code.append("\t};\n");
+		
+		return code.toString();
+	}
+	
+	/**
+	 * Handles a single Parameter from an Java-Method
+	 * @param from
+	 * @param as
+	 * @param i
+	 * @param methodBody
+	 * @param code
+	 */
+	private void generateCodeForParameterHandling(From from, As as, int i, StringBuffer methodBody, StringBuffer code) {
+		if(from != null) {
+			if(as == null) {
+				methodBody.append("\t\tvar param"+i+" = "+from.value()+";\n");
+			} else {
+				methodBody.append("\t\tvar "+as.value()+" = "+from.value()+";\n");
+			}
+		} else {
+			code.append("param"+i);
+		}
+	}
+	
+	/**
+	 * Writes the Code for sending a GET-Request to the origin
+	 * @param pathPattern
+	 * @return
+	 */
+	private String generateGetRequestFor(String pathPattern) {
+		return "$.ajax();"; // TODO: ausprogrammieren!
 	}
 
 	/**
