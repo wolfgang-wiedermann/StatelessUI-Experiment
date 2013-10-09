@@ -1,5 +1,6 @@
 package test;
 
+import de.ww.statelessui.annotations.As;
 import de.ww.statelessui.annotations.From;
 import de.ww.statelessui.annotations.HandlerMethod;
 import de.ww.statelessui.annotations.HttpMethod;
@@ -7,8 +8,8 @@ import de.ww.statelessui.annotations.HttpMethod;
 
 public class TestController {
 
-	@HandlerMethod(type=HttpMethod.GET)
-	public TestModel getByPrimaryKey(@From("test.name") String key) {
+	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
+	public TestModel getByPrimaryKey(@From("test.name") @As("id") String key) {
 		return null;
 	}
 	
