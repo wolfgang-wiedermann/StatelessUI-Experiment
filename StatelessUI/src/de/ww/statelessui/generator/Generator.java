@@ -166,7 +166,7 @@ public class Generator {
 		String path = this.getAbsolutePath(pathPattern);
 		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
 				+"type: 'PUT', \n\t\t\t"
-		// Irgendwo muss noch das Objekt übergeben werden !!!
+				+"data: self."+modelName+", \n\t\t\t"
 				+"dataType: 'json', \n\t\t\t"				
 				+"});\n";
 	}
@@ -177,7 +177,12 @@ public class Generator {
 	 * @return
 	 */
 	private String generatePostRequestFor(String pathPattern) {
-		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
+		String path = this.getAbsolutePath(pathPattern);
+		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
+				+"type: 'POST', \n\t\t\t"
+				+"data: self."+modelName+", \n\t\t\t"
+				+"dataType: 'json', \n\t\t\t"				
+				+"});\n";
 	}
 	
 	/**
@@ -186,7 +191,12 @@ public class Generator {
 	 * @return
 	 */
 	private String generateDeleteRequestFor(String pathPattern) {
-		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
+		String path = this.getAbsolutePath(pathPattern);
+		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
+				+"type: 'DELETE', \n\t\t\t"
+				//+"data: self."+modelName+", \n\t\t\t" // wahrscheinlich unnötig?
+				+"dataType: 'json', \n\t\t\t"				
+				+"});\n";
 	}
 
 	/**

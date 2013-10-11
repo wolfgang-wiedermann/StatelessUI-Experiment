@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     11.10.2013 19:52:45                                                        
+
+     StatelessUI    
+     Softwareexperiment für ein an knockout.js angepasste Java-Framework
+                   
+     Wolfgang Wiedermann                                                                
+     ====================================================================== -->
+<project name="StatelessUI" default="deploy">
+    <description>
+            Softwareexperiment für ein an knockout.js angepasste Java-Framework
+    </description>
+
+    <!-- ================================= 
+          target: deploy              
+         ================================= -->
+    <target name="deploy" depends="package" description="Softwareexperiment für ein an knockout.js angepasste Java-Framework">
+        <copy file="./statelessui-test.war" 
+        	  tofile="/home/wiw39784/develop/jboss/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: package                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="package">
+    	<jar destfile="statelessui-test.war">
+    		<fileset dir="./web-src">
+    			<include name="**/*.*"/>    			
+			</fileset>
+    	</jar>
+    </target>
+
+</project>
