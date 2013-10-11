@@ -135,9 +135,9 @@ public class Generator {
 	private void generateCodeForParameterHandling(From from, As as, int i, StringBuffer methodBody, StringBuffer code) {
 		if(from != null) {
 			if(as == null) {
-				methodBody.append("\t\tvar param"+i+" = "+from.value()+";\n");
+				methodBody.append("\t\tvar param"+i+" = self."+from.value()+"();\n");
 			} else {
-				methodBody.append("\t\tvar "+as.value()+" = "+from.value()+";\n");
+				methodBody.append("\t\tvar "+as.value()+" = self."+from.value()+"();\n");
 			}
 		} else {
 			code.append("param"+i);
@@ -152,7 +152,9 @@ public class Generator {
 	private String generateGetRequestFor(String pathPattern) {
 		String path = this.getAbsolutePath(pathPattern);
 		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
-				+"method: 'GET', });\n";
+				+"type: 'GET', \n\t\t\t"
+				+"dataType: 'json', \n\t\t\t"				
+				+"});\n";
 	}
 	
 	/**
@@ -161,7 +163,12 @@ public class Generator {
 	 * @return
 	 */
 	private String generatePutRequestFor(String pathPattern) {
-		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
+		String path = this.getAbsolutePath(pathPattern);
+		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
+				+"type: 'PUT', \n\t\t\t"
+		// Irgendwo muss noch das Objekt übergeben werden !!!
+				+"dataType: 'json', \n\t\t\t"				
+				+"});\n";
 	}
 	
 	/**
@@ -200,7 +207,7 @@ public class Generator {
 	 */
 	private String getAbsolutePath(String pathPattern) {
 		String pathAppendix = pathPattern.replaceAll("\\{", "'+").replaceAll("\\}", "+'");
-		String path = "/framework/"+this.getConvertedModelClassName()+"/"+pathAppendix;
+		String path = "./framework/"+this.getConvertedModelClassName()+"/"+pathAppendix;
 		path = path.replaceAll("//", "/");
 		return path;
 	}

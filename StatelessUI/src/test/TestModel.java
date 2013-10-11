@@ -6,7 +6,7 @@ import de.ww.statelessui.annotations.Model;
        controller=TestController.class)
 public class TestModel {
 
-	private String name, vorname;
+	private String name, vorname, strasse, plz, ort, telefon;
 
 	public String getName() {
 		return name;
@@ -22,6 +22,38 @@ public class TestModel {
 
 	public void setVorname(String vorname) {
 		this.vorname = vorname;
+	}
+
+	public String getStrasse() {
+		return strasse;
+	}
+
+	public void setStrasse(String strasse) {
+		this.strasse = strasse;
+	}
+
+	public String getPlz() {
+		return plz;
+	}
+
+	public void setPlz(String plz) {
+		this.plz = plz;
+	}
+
+	public String getOrt() {
+		return ort;
+	}
+
+	public void setOrt(String ort) {
+		this.ort = ort;
+	}
+
+	public String getTelefon() {
+		return telefon;
+	}
+
+	public void setTelefon(String telefon) {
+		this.telefon = telefon;
 	}
 
 }
