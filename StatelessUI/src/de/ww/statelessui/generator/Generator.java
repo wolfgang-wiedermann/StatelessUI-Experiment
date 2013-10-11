@@ -16,9 +16,11 @@ import de.ww.statelessui.exceptions.NoModelAnnotationException;
 public class Generator {
 
 	private Object model;
+	private String modelName;
 	
 	public Generator(Object model) {
-		this.model = model;
+		this.model = model;	
+		this.modelName = ((Model)model.getClass().getAnnotation(Model.class)).name();
 	}
 	
 	/**
@@ -32,25 +34,27 @@ public class Generator {
 		if(!modelClass.isAnnotationPresent(Model.class)) {
 			throw new NoModelAnnotationException();
 		}
+		
 		StringBuffer code = new StringBuffer();
 		code.append("function GeneratedViewModel() {\n");
-		code.append("\tvar self = this;\n");
-		String modelName = ((Model)modelClass.getAnnotation(Model.class)).name();
+		code.append("\tvar self = this;\n");		
 		Class<?> controllerClass = ((Model)modelClass.getAnnotation(Model.class)).controller();
+		code.append("\tself."+modelName+" = {};\n");
 		
 		// Attribute rausschreiben
 		Method methods[] = modelClass.getDeclaredMethods();
 		for(Method m : methods) {
 			if(m.getName().startsWith("get")) {
 				String fieldName = convertMethodName(m.getName());				
-				code.append("\tself."+fieldName+" = ko.observable(\"todo\");\n");
+				code.append("\tself."+modelName+"."+fieldName+" = ko.observable(\"todo\");\n");
 			}
 		}
 		
 		// Handler-Funktionen rausschreiben
 		code.append(generateKnockoutHandlers(controllerClass, modelClass));
 		
-		code.append("\n}\nvar "+modelName+" = new GeneratedViewModel();\nko.applyBindings("+modelName+");\n");
+		code.append("\n}\nvar "+modelName+" = new GeneratedViewModel();\n");
+		code.append("$(document).ready(function() { ko.applyBindings("+modelName+"); });\n");
 		return code.toString();
 	}
 	
@@ -77,7 +81,7 @@ public class Generator {
 	 * @param m
 	 * @return
 	 */
-	public String generateSingleKnockoutHandler(Method m) {
+	private String generateSingleKnockoutHandler(Method m) {
 		StringBuffer code = new StringBuffer();
 		HandlerMethod annotation = m.getAnnotation(HandlerMethod.class);
 		String methodName = m.getName();
@@ -102,11 +106,14 @@ public class Generator {
 			case GET:
 				code.append(generateGetRequestFor(annotation.pathPattern()));
 				break;
-			case PUT: 
+			case PUT:
+				code.append(generatePutRequestFor(annotation.pathPattern()));
 				break;
 			case POST: 
+				code.append(generatePostRequestFor(annotation.pathPattern()));
 				break;
 			case DELETE: 
+				code.append(generateDeleteRequestFor(annotation.pathPattern()));
 				break;
 			default: 
 				throw new RuntimeException("Unsupported Type");
@@ -143,7 +150,36 @@ public class Generator {
 	 * @return
 	 */
 	private String generateGetRequestFor(String pathPattern) {
-		return "$.ajax();"; // TODO: ausprogrammieren!
+		String path = this.getAbsolutePath(pathPattern);
+		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
+				+"method: 'GET', });\n";
+	}
+	
+	/**
+	 * Writes the Code for sending a PUT-Request to the origin
+	 * @param pathPattern
+	 * @return
+	 */
+	private String generatePutRequestFor(String pathPattern) {
+		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
+	}
+	
+	/**
+	 * Writes the Code for sending a POST-Request to the origin
+	 * @param pathPattern
+	 * @return
+	 */
+	private String generatePostRequestFor(String pathPattern) {
+		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
+	}
+	
+	/**
+	 * Writes the Code for sending a DELETE-Request to the origin
+	 * @param pathPattern
+	 * @return
+	 */
+	private String generateDeleteRequestFor(String pathPattern) {
+		return "\t\t$.ajax();\n"; // TODO: ausprogrammieren!
 	}
 
 	/**
@@ -151,10 +187,32 @@ public class Generator {
 	 * @param methodName
 	 * @return
 	 */
-	public String convertMethodName(String methodName) {
+	private String convertMethodName(String methodName) {
 		String temp = methodName.substring(3);
 		temp = temp.substring(0,1).toLowerCase()+temp.substring(1);
 		return temp;
+	}
+	
+	/**
+	 * Erstellt aus dem Path-Pattern einen konkreten Pfad für einen Ajax-Call
+	 * @param pathPattern
+	 * @return
+	 */
+	private String getAbsolutePath(String pathPattern) {
+		String pathAppendix = pathPattern.replaceAll("\\{", "'+").replaceAll("\\}", "+'");
+		String path = "/framework/"+this.getConvertedModelClassName()+"/"+pathAppendix;
+		path = path.replaceAll("//", "/");
+		return path;
+	}
+	
+	/**
+	 * Converts the classname of the model from its usual camel case to lower case
+	 * @return
+	 */
+	public String getConvertedModelClassName() {
+		String name = this.model.getClass().getName();
+		name = name.substring(name.lastIndexOf(".")+1);
+		return name.toLowerCase();
 	}
 
 }
