@@ -26,7 +26,15 @@ public class UrlBinding {
 	}
 	
 	public ControllerMethodCommand find(String path) {
-		return null;
+		ControllerMethodCommand cmd = this.pathsWithoutParams.get(path);
+		if(cmd == null) {
+			for(String urlRegex : this.pathsWithParams.keySet()) {
+				if(path.matches(urlRegex)) {
+					cmd = this.pathsWithParams.get(urlRegex);
+				}
+			}
+		}
+		return cmd;
 	}
 
 	private void bindPathWithoutParams(Method m, Object controller, String pathPattern) {
