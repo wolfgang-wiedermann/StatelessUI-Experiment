@@ -23,7 +23,7 @@ public class TestController {
 		return lst;
 	}
 	
-	@HandlerMethod(type=HttpMethod.POST)
+	@HandlerMethod(type=HttpMethod.POST, pathPattern="/")
 	public TestModel postModel(@From("test") TestModel model) {
 		return model;
 	}

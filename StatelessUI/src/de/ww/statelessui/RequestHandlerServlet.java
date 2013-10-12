@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import test.TestModel;
 import de.ww.statelessui.annotations.Model;
 import de.ww.statelessui.exceptions.NoModelAnnotationException;
+import de.ww.statelessui.executor.ControllerMethodExecutor;
 import de.ww.statelessui.generator.Generator;
 
 @WebServlet(name="RequestHandlerServlet", urlPatterns={"/framework/*"})
@@ -19,19 +20,20 @@ public class RequestHandlerServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -1133580085266827686L;
 	private String modelJS;
-	private String modelClassName;
+	private Generator generator;
 	private Object controller;
+	private ControllerMethodExecutor executor;
 
 	public RequestHandlerServlet() 
 			throws NoModelAnnotationException, InstantiationException, IllegalAccessException {
 		
 		// TODO: Feste Bindung ans Model dann durch dynamisches Suchen nach Model-Objekten ersetzen
 		TestModel tm = new TestModel();
-		Generator g = new Generator(tm);
-		this.modelJS = g.generateKnockoutModel();
-		this.modelClassName = g.getConvertedModelClassName();
+		this.generator = new Generator(tm);
+		this.modelJS = this.generator.generateKnockoutModel();		
 		Class<?> controllerClass = tm.getClass().getAnnotation(Model.class).controller();
-		this.controller = controllerClass.newInstance();		
+		this.controller = controllerClass.newInstance();	
+		this.executor = new ControllerMethodExecutor(this.controller);
 	}
 	
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -51,6 +53,10 @@ public class RequestHandlerServlet extends HttpServlet {
 	}
 	
 	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		Object result = executor.exec(request);
+		// TODO: result in JSON serialisieren und dann anstelle von demoContent zurückliefern.
+		
 		String demoContent = "{name:'Mustermann', vorname:'max', nummer:1}";
 		response.setContentType("text/html");
 		response.setContentLength(demoContent.length());
