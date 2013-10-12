@@ -6,7 +6,16 @@ import de.ww.statelessui.annotations.Model;
        controller=TestController.class)
 public class TestModel {
 
+	private int nummer;
 	private String name, vorname, strasse, plz, ort, telefon;
+
+	public int getNummer() {
+		return nummer;
+	}
+
+	public void setNummer(int nummer) {
+		this.nummer = nummer;
+	}
 
 	public String getName() {
 		return name;

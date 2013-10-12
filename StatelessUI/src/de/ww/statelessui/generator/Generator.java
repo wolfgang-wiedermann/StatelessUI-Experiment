@@ -153,8 +153,15 @@ public class Generator {
 		String path = this.getAbsolutePath(pathPattern);
 		return "\t\t$.ajax({\n\t\t\turl:'"+path+"',\n\t\t\t"
 				+"type: 'GET', \n\t\t\t"
-				+"dataType: 'json', \n\t\t\t"				
-				+"});\n";
+				//+"dataType: 'json', \n\t\t\t"	
+				+"cache:false, \n\t\t\t"
+				+"success: function(data) {\n\t\t\t"
+				+"alert('Erfolg: '+JSON.stringify(data)+' -- '+data); \n\t\t\t"
+				+"},"
+				+"error: function(error) {\n\t\t\t"
+				+"alert('Fehler: '+JSON.stringify(error)); \n\t\t\t"
+				+"},"
+				+"});\n";		
 	}
 	
 	/**

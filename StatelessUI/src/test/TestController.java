@@ -1,5 +1,7 @@
 package test;
 
+import java.util.ArrayList;
+
 import de.ww.statelessui.annotations.As;
 import de.ww.statelessui.annotations.From;
 import de.ww.statelessui.annotations.HandlerMethod;
@@ -9,8 +11,16 @@ import de.ww.statelessui.annotations.HttpMethod;
 public class TestController {
 
 	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
-	public TestModel getByPrimaryKey(@From("test.name") @As("id") String key) {
+	public TestModel getByPrimaryKey(@From("test.nummer") @As("id") String key) {
 		return null;
+	}
+	
+	@HandlerMethod(type=HttpMethod.GET, pathPattern="/list")
+	public ArrayList<TestModel> getListOfTestModel() {
+		ArrayList<TestModel> lst = new ArrayList<TestModel>();
+		lst.add(new TestModel());
+		lst.add(new TestModel());
+		return lst;
 	}
 	
 	@HandlerMethod(type=HttpMethod.POST)

@@ -50,7 +50,14 @@ public class RequestHandlerServlet extends HttpServlet {
 		ps.close();
 	}
 	
-	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) {
-		response.setContentType("application/json");
+	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String demoContent = "{name:'Mustermann', vorname:'max', nummer:1}";
+		response.setContentType("text/html");
+		response.setContentLength(demoContent.length());
+		PrintStream ps = new PrintStream(response.getOutputStream());
+		// Dummy-Wert zurückliefern
+		ps.print(demoContent);
+		ps.flush();
+		ps.close();
 	}
 }
