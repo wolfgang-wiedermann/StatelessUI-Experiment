@@ -15,8 +15,8 @@ public class UrlBinding {
 		
 	}
 	
-	public void bind(Method m, Object controller) {
-		String pathPattern = m.getAnnotation(HandlerMethod.class).pathPattern();
+	public void bind(Method m, Object controller, String modelname) {
+		String pathPattern = "/"+modelname+m.getAnnotation(HandlerMethod.class).pathPattern();
 		Matcher matcher = Pattern.compile("\\{[^\\{\\}/]*\\}").matcher(pathPattern);
 		if(matcher.find()) {
 			bindPathWithParams(m, controller, pathPattern);
@@ -33,6 +33,9 @@ public class UrlBinding {
 					cmd = this.pathsWithParams.get(urlRegex);
 				}
 			}
+		}
+		if(cmd == null) {
+			throw new RuntimeException("No Controller found for given Path");
 		}
 		return cmd;
 	}

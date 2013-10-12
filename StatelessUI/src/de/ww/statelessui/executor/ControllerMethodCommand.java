@@ -15,4 +15,20 @@ public class ControllerMethodCommand {
 	public Object exec(Object params[]) {
 		return null;
 	}
+
+	public Method getMethod() {
+		return method;
+	}
+
+	public void setMethod(Method method) {
+		this.method = method;
+	}
+
+	public Object getController() {
+		return controller;
+	}
+
+	public void setController(Object controller) {
+		this.controller = controller;
+	}
 }

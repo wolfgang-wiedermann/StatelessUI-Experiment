@@ -11,10 +11,12 @@ import de.ww.statelessui.annotations.HttpMethod;
 public class ControllerMethodExecutor {
 	
 	private Object controller;
+	private String modelname;
 	private HashMap<HttpMethod, UrlBinding> urlBinding = new HashMap<HttpMethod, UrlBinding>(); 
 	
-	public ControllerMethodExecutor(Object controller) {
+	public ControllerMethodExecutor(Object controller, String modelname) {
 		this.controller = controller;
+		this.modelname = modelname;
 		this.initializeUrlBinding();
 	}
 	
@@ -33,7 +35,7 @@ public class ControllerMethodExecutor {
 			binding = new UrlBinding();
 			this.urlBinding.put(http, binding);
 		}
-		binding.bind(m, controller);
+		binding.bind(m, controller, modelname);
 	}
 	
 	public ControllerMethodCommand find(String httpMethod, String url) {
@@ -43,6 +45,8 @@ public class ControllerMethodExecutor {
 	
 	public Object exec(HttpServletRequest request) {
 		ControllerMethodCommand cmd = this.find(request.getMethod(), request.getPathInfo());
+		
+		System.out.println("Method: "+cmd.getMethod().getName());
 		//return cmd.exec(params);
 		return null;
 	}

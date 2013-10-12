@@ -33,7 +33,8 @@ public class RequestHandlerServlet extends HttpServlet {
 		this.modelJS = this.generator.generateKnockoutModel();		
 		Class<?> controllerClass = tm.getClass().getAnnotation(Model.class).controller();
 		this.controller = controllerClass.newInstance();	
-		this.executor = new ControllerMethodExecutor(this.controller);
+		this.executor = new ControllerMethodExecutor(this.controller, 
+								this.generator.getConvertedModelClassName());
 	}
 	
 	public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,6 +55,7 @@ public class RequestHandlerServlet extends HttpServlet {
 	
 	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
+		System.out.println(request.getPathInfo());
 		Object result = executor.exec(request);
 		// TODO: result in JSON serialisieren und dann anstelle von demoContent zurückliefern.
 		
