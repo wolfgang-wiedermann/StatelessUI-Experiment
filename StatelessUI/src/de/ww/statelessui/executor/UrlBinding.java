@@ -35,6 +35,8 @@ public class UrlBinding {
 			}
 		}
 		if(cmd == null) {
+			// TODO: Auf spezielle typisierte Exception anpassen, sodass im RequestHandlerServlet
+			//       passend dazu ErrorCode 404 not found gesendet werden kann.
 			throw new RuntimeException("No Controller found for given Path");
 		}
 		return cmd;

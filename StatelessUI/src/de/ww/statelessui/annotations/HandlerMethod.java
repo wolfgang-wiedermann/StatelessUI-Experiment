@@ -16,7 +16,8 @@ public @interface HandlerMethod {
 	
 	/**
 	 * Path-Patterns can be like for example "/bla/{id}"
+	 * (default = /)
 	 * @return
 	 */
-	String pathPattern() default "[unassigned]";
+	String pathPattern() default "/";
 }

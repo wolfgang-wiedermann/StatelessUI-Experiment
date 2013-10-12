@@ -46,7 +46,9 @@ public class ControllerMethodExecutor {
 	public Object exec(HttpServletRequest request) {
 		ControllerMethodCommand cmd = this.find(request.getMethod(), request.getPathInfo());
 		
+		//TODO: hier weitermachen und die Demo-Ausgabe durch einen tatsächlichen Aufruf ersetzen!
 		System.out.println("Method: "+cmd.getMethod().getName());
+		
 		//return cmd.exec(params);
 		return null;
 	}

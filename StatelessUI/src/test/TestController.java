@@ -27,5 +27,10 @@ public class TestController {
 	public TestModel postModel(@From("test") TestModel model) {
 		return model;
 	}
+	
+	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}/sepp")
+	public TestModel getTest(@From("test.nummer") @As("id") Integer nummer) {
+		return null;
+	}
 
 }

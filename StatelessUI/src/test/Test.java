@@ -1,10 +1,9 @@
-package de.ww.statelessui;
+package test;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import test.TestModel;
 import de.ww.statelessui.exceptions.NoModelAnnotationException;
 import de.ww.statelessui.generator.Generator;
 
