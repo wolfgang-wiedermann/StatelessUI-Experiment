@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import test.TestModel;
 import de.ww.statelessui.annotations.Model;
 import de.ww.statelessui.exceptions.NoModelAnnotationException;
+import de.ww.statelessui.exceptions.UnsupportedParameterTypeException;
 import de.ww.statelessui.executor.ControllerMethodExecutor;
 import de.ww.statelessui.generator.Generator;
 
@@ -41,7 +42,12 @@ public class RequestHandlerServlet extends HttpServlet {
 		if(request.getPathInfo().endsWith("model.js")) {
 			returnModelJS(request, response);
 		} else {
-			handleAjaxRequest(request, response);
+			try {
+				handleAjaxRequest(request, response);
+			} catch (UnsupportedParameterTypeException e) {
+				e.printStackTrace();
+				throw new ServletException(e);
+			}
 		} 
 	}
 	
@@ -53,7 +59,7 @@ public class RequestHandlerServlet extends HttpServlet {
 		ps.close();
 	}
 	
-	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, UnsupportedParameterTypeException {
 		
 		System.out.println(request.getPathInfo());
 		Object result = executor.exec(request);
