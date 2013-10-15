@@ -2,6 +2,7 @@ package de.ww.statelessui.executor;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -55,19 +56,21 @@ public class ControllerMethodExecutor {
 		return this.urlBinding.get(method).find(url);
 	}
 	
-	public Object exec(HttpServletRequest request) throws UnsupportedParameterTypeException {
+	public Object exec(HttpServletRequest request) 
+			throws UnsupportedParameterTypeException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		ControllerMethodCommand cmd = this.find(request.getMethod(), request.getPathInfo());
 		Object params[] = getParameters(cmd.getMethod(), request);
 		
-		//TODO: hier weitermachen und die Demo-Ausgabe durch einen tatsächlichen Aufruf ersetzen!
+		//DEBUG: Begin
 		ObjectMapper mapper = new ObjectMapper();
 		System.out.println("Method: "+cmd.getMethod().getName());
 		for(Object o : params) {
 			System.out.println("Parameter: "+o.toString());
 		}
+		//DEBUG: End
 		
 		return cmd.exec(params);
-		//return null;
+	
 	}
 
 	/**

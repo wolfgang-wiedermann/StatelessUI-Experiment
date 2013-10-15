@@ -12,7 +12,9 @@ public class TestController {
 
 	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
 	public TestModel getByPrimaryKey(@From("test.nummer") @As("id") String key) {
-		return null;
+		TestModel tm = new TestModel();
+		tm.setName(key);
+		return tm;
 	}
 	
 	@HandlerMethod(type=HttpMethod.GET, pathPattern="/list")

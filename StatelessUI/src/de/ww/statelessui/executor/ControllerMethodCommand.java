@@ -1,5 +1,6 @@
 package de.ww.statelessui.executor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class ControllerMethodCommand {
@@ -12,8 +13,9 @@ public class ControllerMethodCommand {
 		this.controller = controller;
 	}
 	
-	public Object exec(Object params[]) {
-		return null;
+	public Object exec(Object params[]) 
+			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {		
+		return method.invoke(controller, params);
 	}
 
 	public Method getMethod() {

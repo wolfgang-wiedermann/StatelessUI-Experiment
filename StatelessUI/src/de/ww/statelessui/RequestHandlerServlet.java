@@ -2,6 +2,7 @@ package de.ww.statelessui;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import test.TestModel;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.ww.statelessui.annotations.Model;
 import de.ww.statelessui.exceptions.NoModelAnnotationException;
 import de.ww.statelessui.exceptions.UnsupportedParameterTypeException;
@@ -44,7 +48,7 @@ public class RequestHandlerServlet extends HttpServlet {
 		} else {
 			try {
 				handleAjaxRequest(request, response);
-			} catch (UnsupportedParameterTypeException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				throw new ServletException(e);
 			}
@@ -59,19 +63,12 @@ public class RequestHandlerServlet extends HttpServlet {
 		ps.close();
 	}
 	
-	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, UnsupportedParameterTypeException {
-		
+	public void handleAjaxRequest(HttpServletRequest request, HttpServletResponse response) 
+			throws IOException, UnsupportedParameterTypeException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		System.out.println(request.getPathInfo());
 		Object result = executor.exec(request);
-		// TODO: result in JSON serialisieren und dann anstelle von demoContent zurückliefern.
-		
-		String demoContent = "{name:'Mustermann', vorname:'max', nummer:1}";
 		response.setContentType("text/html");
-		response.setContentLength(demoContent.length());
-		PrintStream ps = new PrintStream(response.getOutputStream());
-		// Dummy-Wert zurückliefern
-		ps.print(demoContent);
-		ps.flush();
-		ps.close();
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.writeValue(response.getOutputStream(), result);		
 	}
 }
