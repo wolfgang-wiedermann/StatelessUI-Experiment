@@ -37,24 +37,24 @@ Das folgende Beispiel soll zeigen, wie diese Bindungen praktisch untern Nutzung 
 Java-Model
 ----------
 
-@Model(name="demomodel", 
-       controller=DemoController.class)
-public class DemoModel {
-	private String name, vorname;
-	// ... getter und setter zu name und vorname
-}
+	@Model(name="demomodel", 
+    	   controller=DemoController.class)
+	public class DemoModel {
+		private String name, vorname;
+		// ... getter und setter zu name und vorname
+	}
 
 Java-Controller
 ---------------
 
-public class DemoController {
-
-	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
-	public TestModel getByName(@From("demomodel.name") @As("id") String name) {
-		// TODO: Code zur Suche nach Objekten der Klasse DemoModel anhand des Namens	
-		return ergebnisDerSuche;
-	}
-}	
+	public class DemoController {
+	
+		@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
+		public TestModel getByName(@From("demomodel.name") @As("id") String name) {
+			// TODO: Code zur Suche nach Objekten der Klasse DemoModel anhand des Namens	
+			return ergebnisDerSuche;
+		}
+	}	
 
 Javascript-Code
 ---------------
@@ -65,17 +65,17 @@ keiner erforderlich, das Model kann aber durch eigenen Code erweitert werden.
 HTML5-Code
 ----------
 
-...
-<head>
-<script src="./jquery-2.0.3.js"></script>
-<script src="./knockout-2.3.0.js"></script>
-<script src="./framework/model.js"></script>
-</head>
-<body>
-<label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.name"/><br/>
-<label for="forname_tf">Vorname</label><input id="vorname_tf" type="text" data-bind="value: demomodel.vorname"/><br/>
-<br/>
-<br/>
-<button data-bind="click: getByName">Nach Name suchen</button>
-</body>
-...
+	...
+	<head>
+	<script src="./jquery-2.0.3.js"></script>
+	<script src="./knockout-2.3.0.js"></script>
+	<script src="./framework/model.js"></script>
+	</head>
+	<body>
+	<label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.name"/><br/>
+	<label for="forname_tf">Vorname</label><input id="vorname_tf" type="text" data-bind="value: demomodel.vorname"/><br/>
+	<br/>
+	<br/>
+	<button data-bind="click: getByName">Nach Name suchen</button>
+	</body>
+	...
