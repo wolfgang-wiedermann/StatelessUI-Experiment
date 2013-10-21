@@ -11,7 +11,7 @@ import de.ww.statelessui.annotations.HttpMethod;
 public class TestController {
 
 	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}")
-	public TestModel getByPrimaryKey(@From("test.nummer") @As("id") String key) {
+	public TestModel getByPrimaryKey(@From("test.selected.nummer") @As("id") String key) {
 		TestModel tm = new TestModel();
 		tm.setName(key);
 		return tm;
@@ -31,7 +31,7 @@ public class TestController {
 	}
 	
 	@HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}/sepp")
-	public TestModel getTest(@From("test.nummer") @As("id") Integer nummer) {
+	public TestModel getTest(@From("test.selected.nummer") @As("id") Integer nummer) {
 		return null;
 	}
 

@@ -41,20 +41,36 @@ public class Generator {
 		Class<?> controllerClass = ((Model)modelClass.getAnnotation(Model.class)).controller();
 		code.append("\tself."+modelName+" = {};\n");
 		
+		code.append("\tfunction "+this.firstLetterToUpper(modelName)+"(input) { \n");
+		code.append("\t\tvar self = this;\n");
+		code.append("\t\tif(arguments.length === 0) {\n");
 		// Attribute rausschreiben
 		Method methods[] = modelClass.getDeclaredMethods();
 		for(Method m : methods) {
 			if(m.getName().startsWith("get")) {
 				String fieldName = convertMethodName(m.getName());				
-				code.append("\tself."+modelName+"."+fieldName+" = ko.observable(\"todo\");\n");
+				code.append("\t\t\tself."+fieldName+" = ko.observable(\"\");\n");
 			}
 		}
+		code.append("\t\t} else {\n");
+		
+		// Attribute rausschreiben		
+		for(Method m : methods) {
+			if(m.getName().startsWith("get")) {
+				String fieldName = convertMethodName(m.getName());				
+				code.append("\t\t\tself."+fieldName+" = ko.observable(input."+fieldName+");\n");
+			}
+		}
+		code.append("\t\t}\n\t}\n");
+		
+		code.append("\tself."+modelName+".selected = new "+this.firstLetterToUpper(modelName)+"();\n");
+		code.append("\tself."+modelName+".list = [new "+this.firstLetterToUpper(modelName)+"()];\n");
 		
 		// Handler-Funktionen rausschreiben
 		code.append(generateKnockoutHandlers(controllerClass, modelClass));
 		
-		code.append("\n}\nvar "+modelName+" = new GeneratedViewModel();\n");
-		code.append("$(document).ready(function() { ko.applyBindings("+modelName+"); });\n");
+		code.append("\n}\nvar model = new GeneratedViewModel();\n");
+		code.append("$(document).ready(function() { ko.applyBindings(model); });\n");
 		return code.toString();
 	}
 	
@@ -215,6 +231,18 @@ public class Generator {
 		String temp = methodName.substring(3);
 		temp = temp.substring(0,1).toLowerCase()+temp.substring(1);
 		return temp;
+	}
+	
+	/**
+	 * Konvertiert das 1. Zeichen einer Zeichenkette zu einem Großbuchstaben.
+	 * @param name
+	 * @return
+	 */
+	private String firstLetterToUpper(String name) {
+		if(name.length() > 1)
+			return name.substring(0, 1).toUpperCase()+name.substring(1);
+		else
+			return name.toUpperCase();
 	}
 	
 	/**

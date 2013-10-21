@@ -16,10 +16,12 @@
           target: deploy              
          ================================= -->
     <target name="deploy" depends="package" description="Softwareexperiment für ein an knockout.js angepasste Java-Framework">
-        <!--<copy file="./statelessui-test.war" 
-        	  tofile="/home/wiw39784/develop/jboss/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/>-->
-    	<copy file="statelessui-test.war" 
-    	   	  tofile="C:/temp/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/>
+        <copy file="./statelessui-test.war" 
+        	  tofile="/home/wiw39784/Dokumente/pj/2013/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/>
+    	<!-- <copy file="./statelessui-test.war" 
+    	   	  tofile="/home/wiw39784/develop/jboss/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/> -->
+    	<!--<copy file="statelessui-test.war" 
+    	   	  tofile="C:/temp/jboss-as-7.1.1.Final/standalone/deployments/statelessui-test.war"/> -->
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 

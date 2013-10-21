@@ -4,6 +4,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/JBoss 7.1 Runtime"/>
 	<classpathentry kind="lib" path="web-src/WEB-INF/lib/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="web-src/WEB-INF/lib/jackson-annotations-2.3.0.jar"/>
 	<classpathentry kind="lib" path="web-src/WEB-INF/lib/jackson-core-2.3.0.jar"/>
 	<classpathentry kind="lib" path="web-src/WEB-INF/lib/jackson-databind-2.3.0.jar"/>
 	<classpathentry kind="output" path="web-src/WEB-INF/classes"/>
