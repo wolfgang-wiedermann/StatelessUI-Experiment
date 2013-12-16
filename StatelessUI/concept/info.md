@@ -56,7 +56,14 @@ HTML5-Code
 	<script src="./framework/model.js"></script>
 	</head>
 	<body>
-	<label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.selected.name"/><br/>
-	<label for="forname_tf">Vorname</label><input id="vorname_tf" type="text" data-bind="value: demomodel.selected.vorname"/><br/>
+	<label for="id_tf">Id</label><input id="id_tf" type="text" data-bind="value: demomodel.search.id"/><br/>
+	<label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.search.name"/><br/>
 	<br/>
+        <button data-bind="click: demomodel.findByName">Suchen</button>
 	<br/>
+        <table data-bind="foreach: demomodel.list">
+		<tr>
+			<td data-bind="text: id"></td>
+			<td data-bind="text: name"></td>
+		</tr>
+        </table>
