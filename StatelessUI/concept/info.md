@@ -1,19 +1,19 @@
 Java-Model
 ----------
 
-@Model(name="demomodel", 
+ @Model(name="demomodel", 
        scalars={"selected", "search"},
        lists={"list", "list2"})
-public class DemoModel {
+ public class DemoModel {
     private String name, vorname;
     // ... getter und setter zu name und vorname
-}
+ }
 
 Java-Controller
 ---------------
 
-@Controller(model="demomodel")
-public class DemoController {
+ @Controller(model="demomodel")
+ public class DemoController {
 
     @HandlerMethod(type=HttpMethod.GET, pathPattern="/{id}", update="demomodel.selected")
     public TestModel getById(@From("demomodel.search.id") @As("id") String id) {
@@ -39,7 +39,7 @@ public class DemoController {
 
     //?? @BackgroundUpdate(for="demomodel.list2")
     // public List<TestModel> autoUpdateList2(
-} 
+ } 
 
 Javascript-Code
 ---------------
@@ -49,14 +49,14 @@ keiner erforderlich, das Model kann aber durch eigenen Code erweitert werden. (B
 HTML5-Code
 ----------
 
-...
-<head>
-<script src="./jquery-2.0.3.js"></script>
-<script src="./knockout-2.3.0.js"></script>
-<script src="./framework/model.js"></script>
-</head>
-<body>
-<label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.selected.name"/><br/>
-<label for="forname_tf">Vorname</label><input id="vorname_tf" type="text" data-bind="value: demomodel.selected.vorname"/><br/>
-<br/>
-<br/>
+ ...
+ <head>
+ <script src="./jquery-2.0.3.js"></script>
+ <script src="./knockout-2.3.0.js"></script>
+ <script src="./framework/model.js"></script>
+ </head>
+ <body>
+ <label for="name_tf">Name</label><input id="name_tf" type="text" data-bind="value: demomodel.selected.name"/><br/>
+ <label for="forname_tf">Vorname</label><input id="vorname_tf" type="text" data-bind="value: demomodel.selected.vorname"/><br/>
+ <br/>
+ <br/>
